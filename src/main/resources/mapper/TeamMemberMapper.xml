@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rabbit.robot.mapper.TeamMemberDAO">
+
+    <resultMap id="BaseResultMap" type="com.rabbit.robot.DO.TeamMemberDO">
+        <id property="id" column="id"/><!--主键-->
+        <result property="teamId" column="team_id"/><!--团ID-->
+        <result property="location" column="location"/><!--队伍位置-->
+        <result property="position" column="position"/><!--职业-->
+        <result property="color" column="color"/><!--填充颜色-->
+        <result property="memberName" column="member_name"/><!--角色名-->
+        <result property="qq" column="qq"/><!--QQ-->
+        <result property="gmtModify" column="gmt_modify"/><!--修改时间-->
+        <result property="gmtCreate" column="gmt_create"/><!--创建时间-->
+        <result property="deleteYn" column="delete"/><!--0:否 1:删除-->
+    </resultMap>
+
+    <sql id="Base_Column_List">
+		`id` ,
+		`team_id` ,
+		`location` ,
+		`position` ,
+		`color` ,
+		`member_name` ,
+		`qq` ,
+		`gmt_modify` ,
+		`gmt_create` ,
+		`delete_yn`
+	</sql>
+
+
+</mapper>
+
