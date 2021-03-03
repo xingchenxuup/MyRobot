@@ -13,8 +13,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class AsyncTask {
 
-    @Async
-    public void doTask(int i) throws InterruptedException {
-        log.info("Task-Native" + i + " started." + Thread.currentThread().getId());
+//    @Async
+    public void doTask1(int i) throws InterruptedException {
+        log.info("Task1-Native" + i + " started." + Thread.currentThread().getId());
+        Thread.sleep(1000);
+    }
+//    @Async
+    public Boolean doTask2(int i) throws InterruptedException {
+        log.info("Task2-Native" + i + " started." + Thread.currentThread().getId());
+        return Thread.currentThread().getId()>30;
     }
 }
