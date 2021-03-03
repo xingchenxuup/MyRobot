@@ -27,7 +27,6 @@ public interface MessageFacade {
      * @param group
      * @param message
      */
-    @Async("myTaskAsyncPool")
     public void execute(Contact sender, Contact group, Message message) throws InterruptedException, MalformedURLException;
 
     /**
