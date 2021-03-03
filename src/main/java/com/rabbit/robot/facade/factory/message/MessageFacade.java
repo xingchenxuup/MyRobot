@@ -1,17 +1,22 @@
 package com.rabbit.robot.facade.factory.message;
 
 import com.rabbit.robot.enums.EnumKeyWord;
+import com.rabbit.robot.star.RobotStar;
 import net.mamoe.mirai.contact.Contact;
+import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.data.Message;
 import org.springframework.scheduling.annotation.Async;
 
 import java.net.MalformedURLException;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author 邢晨旭
  * @date 2020/11/11
  */
 public interface MessageFacade {
+
 
     /**
      * 关键字诶类型
