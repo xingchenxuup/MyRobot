@@ -2,6 +2,7 @@ package com.rabbit.robot.facade.factory.message;
 
 import com.rabbit.robot.client.HttpClient;
 import com.rabbit.robot.constants.ApiURLConstant;
+import com.rabbit.robot.enums.CD;
 import com.rabbit.robot.enums.EnumKeyWord;
 import com.rabbit.robot.enums.EnumPositionLocation;
 import com.rabbit.robot.helper.SendHelper;
@@ -45,7 +46,6 @@ public class XiaoYaoFacade implements MessageFacade {
     @Override
     public void execute(Contact sender, Contact group, Message message) {
         String content = message.contentToString();
-        log.info(GroupCD.toString());
         if (!this.keyWordVerify(this.get(), content) || GroupCD.get(group.getId())) {
             return;
         }
@@ -59,11 +59,11 @@ public class XiaoYaoFacade implements MessageFacade {
             CompletableFuture.runAsync(() -> {
                 String result = HttpClient.sendGet(ApiURLConstant.XIAO_YAO, HttpClient.creatParamsForName(enumPositionLocation.fullName)).replace("\"",
                         "").replace(",", "");
-                MessageChain plus = new At(sender.getId()).plus(new PlainText(result.substring(1, result.length() - 1).concat("\n")));
-                SendHelper.sendSing(group, plus);
+                MessageChain plus = new At(sender.getId()).plus(new PlainText(result.substring(1, result.length() - 1)));
+                SendHelper.sendSing(group, plus.plus(CD.THIRTY.msg));
                 try {
-                    Thread.sleep(30000);
-                    GroupCD.put(group.getId(), true);
+                    Thread.sleep(CD.THIRTY.cd);
+                    GroupCD.put(group.getId(), false);
                 } catch (InterruptedException e) {
                     log.error("线程等待异常-小药");
                 }
@@ -73,6 +73,13 @@ public class XiaoYaoFacade implements MessageFacade {
             SendHelper.sendSing(myself, new PlainText("ChickenSoupURL错误," + e));
         }
 
+    }
+
+    public static void main(String[] args) {
+        String result = HttpClient.sendGet(ApiURLConstant.XIAO_YAO, HttpClient.creatParamsForName("鲸鱼")).replace("\"",
+                "").replace(",", "");
+        System.out.println(result.substring(1, result.length() - 1).concat("\n"));
+        System.out.println(result.substring(1, result.length() - 1));
     }
 
 }

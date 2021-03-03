@@ -21,10 +21,4 @@ public class Groups {
     public static Map<Long, Boolean> groups = RobotStar.bot.getGroups().stream().collect(Collectors.toMap(Group::getId, group -> true, (k1, k2) -> true));
     public static Set<Long> teamGroup = new HashSet<>();
 
-
-//    static {
-//        System.out.println(groups);
-//        System.out.println(teamGroup);
-//    }
-
 }

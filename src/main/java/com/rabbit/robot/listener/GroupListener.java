@@ -20,11 +20,14 @@ import net.mamoe.mirai.message.data.MessageContent;
 import net.mamoe.mirai.message.data.PlainText;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.Resource;
 import java.net.MalformedURLException;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 import static com.rabbit.robot.star.RobotStar.myself;
 
@@ -41,9 +44,10 @@ public class GroupListener extends SimpleListenerHost {
 
     @Autowired
     ImageFacade imageFacade;
-//    @Autowired
+    //    @Autowired
 //    ZzFacade zzFacade;
-
+    @Resource(name = "myTaskAsyncPool")
+    ThreadPoolTaskExecutor threadPool;
 
     @EventHandler
     public void onMessage(GroupMessageEvent event) throws InterruptedException, MalformedURLException {
@@ -68,8 +72,13 @@ public class GroupListener extends SimpleListenerHost {
         if ("菜单".equals(content)) {
             event.getGroup().sendMessage(new PlainText("功能菜单：\n").plus(RobotMenu.getMenu()));
         }
-        imageFacade.image(event);
-        this.save(event);
+        CompletableFuture.runAsync(() -> {
+            imageFacade.image(event);
+        }, threadPool);
+        CompletableFuture.runAsync(() -> {
+            this.save(event);
+        }, threadPool);
+
     }
 
     @Override
