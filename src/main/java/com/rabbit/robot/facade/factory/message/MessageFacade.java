@@ -3,6 +3,7 @@ package com.rabbit.robot.facade.factory.message;
 import com.rabbit.robot.enums.EnumKeyWord;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.message.data.Message;
+import org.springframework.scheduling.annotation.Async;
 
 import java.net.MalformedURLException;
 
@@ -26,6 +27,7 @@ public interface MessageFacade {
      * @param group
      * @param message
      */
+    @Async("myTaskAsyncPool")
     public void execute(Contact sender, Contact group, Message message) throws InterruptedException, MalformedURLException;
 
     /**

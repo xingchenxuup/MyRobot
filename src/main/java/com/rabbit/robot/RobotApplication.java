@@ -2,6 +2,7 @@ package com.rabbit.robot;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
+import com.rabbit.robot.config.TaskThreadPoolConfig;
 import com.rabbit.robot.helper.ApplicationContextHelper;
 import com.rabbit.robot.listener.FriendListener;
 import com.rabbit.robot.listener.GroupListener;
@@ -11,10 +12,13 @@ import com.rabbit.robot.star.RobotStar;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-
+@EnableAsync
+@EnableConfigurationProperties({TaskThreadPoolConfig.class} )
 @SpringBootApplication
 @EnableScheduling
 @MapperScan("com.rabbit.robot.mapper")
