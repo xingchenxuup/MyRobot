@@ -6,6 +6,7 @@ import com.rabbit.robot.enums.CD;
 import com.rabbit.robot.enums.EnumKeyWord;
 import com.rabbit.robot.helper.SendHelper;
 import com.rabbit.robot.star.RobotStar;
+import lombok.extern.slf4j.Slf4j;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.data.At;
@@ -28,6 +29,7 @@ import static com.rabbit.robot.star.RobotStar.myself;
  * @date 2020/11/11
  */
 @Component
+@Slf4j
 public class RiChangFacade implements MessageFacade {
     private static final Map<Long, Boolean> GroupCD = RobotStar.bot.getGroups().stream().collect(Collectors.toMap(Group::getId, group -> false, (k1, k2) -> false));
 
@@ -55,7 +57,7 @@ public class RiChangFacade implements MessageFacade {
                     TimeUnit.MILLISECONDS.sleep(CD.THIRTY.cd);
                     GroupCD.put(group.getId(), false);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    log.error("线程等待异常-日常查询");
                 }
             }, threadPool);
 
