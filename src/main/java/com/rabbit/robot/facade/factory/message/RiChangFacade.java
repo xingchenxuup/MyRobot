@@ -50,9 +50,9 @@ public class RiChangFacade implements MessageFacade {
                 String result = HttpClient.sendGet(ApiURLConstant.RICHANG, HttpClient.creatParamsForServer("剑胆琴心")).replace("\"",
                         "").replace(",", "");
                 MessageChain plus = new At(sender.getId()).plus(new PlainText(result.substring(1, result.length() - 1)));
-                SendHelper.sendSing(group, plus.plus(CD.TEN.msg));
+                SendHelper.sendSing(group, plus.plus(CD.THIRTY.msg));
                 try {
-                    TimeUnit.MILLISECONDS.sleep(CD.TEN.cd);
+                    TimeUnit.MILLISECONDS.sleep(CD.THIRTY.cd);
                     GroupCD.put(group.getId(), false);
                 } catch (InterruptedException e) {
                     e.printStackTrace();

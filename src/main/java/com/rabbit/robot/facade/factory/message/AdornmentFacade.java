@@ -7,19 +7,26 @@ import com.rabbit.robot.constants.CommonConstant;
 import com.rabbit.robot.constants.jx.AdornmentEnum;
 import com.rabbit.robot.constants.jx.ResultInfo;
 import com.rabbit.robot.constants.jx.ResultInfos;
+import com.rabbit.robot.enums.CD;
 import com.rabbit.robot.enums.EnumKeyWord;
 import com.rabbit.robot.helper.SendHelper;
 import com.rabbit.robot.star.RobotStar;
 import com.rabbit.robot.utils.MessageUtil;
 import net.mamoe.mirai.contact.Contact;
+import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.message.data.At;
 import net.mamoe.mirai.message.data.Image;
 import net.mamoe.mirai.message.data.Message;
 import net.mamoe.mirai.message.data.PlainText;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.net.URL;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import static com.rabbit.robot.star.RobotStar.myself;
 import static com.rabbit.robot.utils.MessageUtil.initImage;
@@ -31,6 +38,11 @@ import static com.rabbit.robot.utils.MessageUtil.initImage;
 @Component
 public class AdornmentFacade implements MessageFacade {
 
+    private static final Map<Long, Boolean> GroupCD = RobotStar.bot.getGroups().stream().collect(Collectors.toMap(Group::getId, group -> false, (k1, k2) -> false));
+
+    @Resource(name = "myTaskAsyncPool")
+    ThreadPoolTaskExecutor threadPool;
+
     @Override
     public EnumKeyWord get() {
         return EnumKeyWord.ADORNMENT;
@@ -39,20 +51,30 @@ public class AdornmentFacade implements MessageFacade {
     @Override
     public void execute(Contact sender, Contact group, Message message) {
         String content = message.contentToString();
-        if (!this.keyWordVerify(this.get(), content)) {
+        if (!this.keyWordVerify(this.get(), content) || GroupCD.get(group.getId())) {
             return;
         }
+        GroupCD.put(group.getId(), true);
         try {
+            CompletableFuture.runAsync(() -> {
+                String result = HttpClient.sendGet(ApiURLConstant.ADORNMENT, HttpClient.creatParamsForName(MessageUtil.getKeybyWord(content, 2)));
+                ResultInfos resultInfos = new Gson().fromJson(result, ResultInfos.class);
+                if (resultInfos.getCode() == 0) {
+                    SendHelper.sendSing(group, new At(sender.getId()).plus("没有查到哦。"));
+                    return;
+                }
+                Image image = group.uploadImage(initImage(resultInfos.getData().getImagePath()));
+                SendHelper.sendSing(group, image.plus(new PlainText(creatResult(resultInfos)))
+                .plus(CD.THIRTY.msg));
 
-            String result = HttpClient.sendGet(ApiURLConstant.ADORNMENT, HttpClient.creatParamsForName(MessageUtil.getKeybyWord(content, 2)));
-            ResultInfos resultInfos = new Gson().fromJson(result, ResultInfos.class);
-            if (resultInfos.getCode() == 0) {
-                SendHelper.sendSing(group, new At(sender.getId()).plus("没有查到哦。"));
-                return;
-            }
-            Image image = group.uploadImage(initImage(resultInfos.getData().getImagePath()));
-            SendHelper.sendSing(group, image.plus(new PlainText(creatResult(resultInfos))));
-            TimeUnit.SECONDS.sleep(30);
+                try {
+                    TimeUnit.MILLISECONDS.sleep(CD.THIRTY.cd);
+                    GroupCD.put(group.getId(), false);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }, threadPool);
+
         } catch (Exception e) {
             SendHelper.sendSing(group, new PlainText("网络繁忙,求助兔兔!!!"));
             SendHelper.sendSing(myself, new PlainText("ChickenSoupURL错误," + e));
