@@ -8,6 +8,7 @@ public interface ApiURLConstant {
 
     String GROUP_JOIN = "https://jx3kt.oss-cn-shanghai.aliyuncs.com/group/group%s.jpg";
     String GROUP_JOIN2 = "https://jx3kt.oss-cn-shanghai.aliyuncs.com/group/group.gif";
+    String GROUP_KING = "https://jx3kt.oss-cn-shanghai.aliyuncs.com/group/GroupDragonKing%s.png";
     String GROUP_FAN = "https://jx3kt.oss-cn-shanghai.aliyuncs.com/group/fan.jpg";
 
     String LOVE_URL = "https://s.nmsl8.club/loveword?type=1";

@@ -4,10 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize;
 import com.rabbit.robot.config.TaskThreadPoolConfig;
 import com.rabbit.robot.helper.ApplicationContextHelper;
-import com.rabbit.robot.listener.FriendListener;
-import com.rabbit.robot.listener.GroupListener;
-import com.rabbit.robot.listener.GroupRequestListener;
-import com.rabbit.robot.listener.LoginListener;
+import com.rabbit.robot.listener.*;
 import com.rabbit.robot.star.RobotStar;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
@@ -31,6 +28,7 @@ public class RobotApplication {
         RobotStar.star(ApplicationContextHelper.getBean(FriendListener.class),
                 ApplicationContextHelper.getBean(GroupListener.class),
                 ApplicationContextHelper.getBean(GroupRequestListener.class),
+                ApplicationContextHelper.getBean(GroupTalkativeChangeListener.class),
                 ApplicationContextHelper.getBean(LoginListener.class));
     }
 
