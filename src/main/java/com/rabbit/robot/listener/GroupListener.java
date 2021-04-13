@@ -10,6 +10,7 @@ import com.rabbit.robot.facade.factory.MessageFactory;
 import com.rabbit.robot.facade.factory.message.MessageFacade;
 import com.rabbit.robot.mapper.GroupMessageDao;
 import com.rabbit.robot.utils.MessageUtil;
+import com.rabbit.robot.utils.aliyun.SpeechSynthesizerDemo;
 import kotlin.coroutines.CoroutineContext;
 import lombok.extern.slf4j.Slf4j;
 import net.mamoe.mirai.event.EventHandler;
@@ -60,6 +61,14 @@ public class GroupListener extends SimpleListenerHost {
         MessageChain messageChain = event.getMessage();
         MessageContent plainText = messageChain.get(PlainText.Key);
         String content = Objects.requireNonNull(plainText).contentToString();
+        //TODO 下
+        System.out.println(content);
+        if("语音消息测试".equals(content)){
+            SpeechSynthesizerDemo.sendVoice(event.getGroup(),"这是一条语音测试");
+        }
+
+
+        //TODO 上
         if (!StringUtils.isEmpty(content)) {
             // 关键词检索
             EnumKeyWord ruleEnum = EnumKeyWord.groupFind(MessageUtil.getKeybyWord(content, 1));
@@ -72,12 +81,12 @@ public class GroupListener extends SimpleListenerHost {
         if ("菜单".equals(content)) {
             event.getGroup().sendMessage(new PlainText("功能菜单：\n").plus(RobotMenu.getMenu()));
         }
-        CompletableFuture.runAsync(() -> {
-            imageFacade.image(event);
-        }, threadPool);
-        CompletableFuture.runAsync(() -> {
-            this.save(event);
-        }, threadPool);
+//        CompletableFuture.runAsync(() -> {
+//            imageFacade.image(event);
+//        }, threadPool);
+//        CompletableFuture.runAsync(() -> {
+//            this.save(event);
+//        }, threadPool);
 
     }
 

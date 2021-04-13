@@ -37,3 +37,4 @@ build/
 /src/test/
 1687126558L.json
 /cache/
+/src/main/java/com/rabbit/robot/utils/aliyun/SpeechSynthesizerDemo.java

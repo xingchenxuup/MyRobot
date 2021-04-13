@@ -28,7 +28,7 @@ public class RobotApplication {
         RobotStar.star(ApplicationContextHelper.getBean(FriendListener.class),
                 ApplicationContextHelper.getBean(GroupListener.class),
                 ApplicationContextHelper.getBean(GroupRequestListener.class),
-                ApplicationContextHelper.getBean(GroupTalkativeChangeListener.class),
+//                ApplicationContextHelper.getBean(GroupTalkativeChangeListener.class),
                 ApplicationContextHelper.getBean(LoginListener.class));
     }
 
