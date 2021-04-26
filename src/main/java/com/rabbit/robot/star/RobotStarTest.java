@@ -9,19 +9,31 @@ import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;
 import net.mamoe.mirai.contact.Friend;
 import net.mamoe.mirai.utils.BotConfiguration;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 
 /**
  * @author 邢晨旭
  * @date 2020/6/28 上午11:48
  */
+@Component
 public class RobotStarTest {
 
     public static Bot bot = null;
     public static Friend myself = null;
 
-    private static final Long QQ = 111L;
-    private static final String PASSWORD = "password";
+    private static Long QQ = 111L;
+    private static String PASSWORD = "password";
+
+    @Value("qq")
+    public void setQQ(Long qq){
+        QQ = qq;
+    }
+    @Value("password")
+    public void setPassword(String password){
+        PASSWORD = password;
+    }
 
     static {
 //        // 机器人
